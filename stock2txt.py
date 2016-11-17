@@ -64,13 +64,13 @@ def sharesCrawl2(shareCode,year,season):
 
 
 def createUrl(shareCode,beginYear,endYear):
-    title = str(shareCode)
+    shareCodeStr = str(shareCode)
 
-    if os.path.exists('./'+title) == False:
-        #create the share folder
-        os.mkdir('./'+title)
+    # if os.path.exists('./'+title) == False:
+    #     #create the share folder
+    #     os.mkdir('./'+title)
 
-    f = open('./' + title + '.txt', 'wb')
+    f = open('./' + shareCodeStr + '.txt', 'wb')
 
     try:
         for i in range(beginYear,endYear+1):

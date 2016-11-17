@@ -24,20 +24,18 @@ def sharesCrawl(shareCode,year,season):
     table = soup.findAll('table',{'class':'table_bg001'})[0]
     rows = table.findAll('tr')
 
-    # for row in rows:
-    #     if row.findAll('td') != []:
-    #         for cell in row.findAll('td'):
-    #             print cell
-    #     else:
-    #         print 'sadasdad'
     return rows[::-1]
 
-# sharesCrawl(601857, 2007, 2)
 
-def writeCSV(shareCode,beginYear,endYear):
+def writeCSVWithName(shareCode,beginYear,endYear):
     shareCodeStr = str(shareCode)
 
-    csvFile = open('./data/' + shareCodeStr + '.csv', 'wb')
+    url = 'http://quotes.money.163.com/trade/lsjysj_' + shareCodeStr + '.html'
+    data = requests.get(url, headers=headers)
+    soup = BeautifulSoup(data.text, 'lxml')
+    name = soup.select('h1.name > a')[0].get_text()
+
+    csvFile = open('./dataWithName/' + shareCodeStr + name + '.csv', 'wb')
     writer = csv.writer(csvFile)
     writer.writerow(('日期','开盘价','最高价','最低价','收盘价','涨跌额','涨跌幅','成交量','成交金额','振幅','换手率'))
 
@@ -49,18 +47,15 @@ def writeCSV(shareCode,beginYear,endYear):
                 rows = sharesCrawl(shareCode,i,j)
                 for row in rows:
                     csvRow = []
-                    # 判断是否有数据
-                    if row.findAll('td') != []:
-                        for cell in row.findAll('td'):
-                            csvRow.append(cell.get_text().replace(',',''))
-                        if csvRow != []:
-                            writer.writerow(csvRow)
+                    for cell in row.findAll('td'):
+                        csvRow.append(cell.get_text().replace(',',''))
+                    if csvRow != []:
+                        writer.writerow(csvRow)
                 time.sleep(3)
-                print str(i) + '年' + str(j) + '季度is done'
+                print str(i) + '年' + str(j)  + '季度is done'
     except:
         print '----- 爬虫出错了！没有进入循环-----'
     finally:
         csvFile.close()
 
-writeCSV(601857,2007,2016)
-
+writeCSVWithName(600019,2016,2016)

@@ -23,7 +23,7 @@ def sharesCrawl(shareCode,year,season):
     table = soup.findAll('table',{'class':'table_bg001'})[0]
     rows = table.findAll('tr')
 
-    csvFile = open('./' + shareCodeStr + '.csv', 'wb')
+    csvFile = open('./data/' + shareCodeStr + 'Y' + yearStr + 'S' + seasonStr + '.csv', 'wb')
     writer = csv.writer(csvFile)
 
     writer.writerow(('日期', '开盘价', '最高价', '最低价', '收盘价', '涨跌额', '涨跌幅', '成交量', '成交金额', '振幅', '换手率'))
